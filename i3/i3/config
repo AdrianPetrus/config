@@ -100,7 +100,8 @@ bindsym $mod+period exec "amixer -q sset Master,0 10%- unmute"
 # name the workspaces
 set $wspace1 "1. Terminals "
 set $wspace2 "2. Browsers "
-set $wspace3 "3. Android "
+#set $wspace3 "3. Android "
+set $wspace3 "3. Git"
 set $wspace4 "4. Eclipse"
 set $wspace5 "5. Email "
 set $wspace6 "6. IM "
@@ -140,20 +141,21 @@ assign [class="firefox"] $wspace2
 assign [class="jetbrains-studio"] $wspace3
 assign [class="Eclipse"] $wspace4
 assign [class="Thunderbird"] $wspace5
+assign [class="Mailspring"] $wspace5
 assign [class="Skype"] $wspace6
 assign [class="Slack"] $wspace6
 assign [class="discord"] $wspace6
 assign [class="Git-gui"] $wspace7
 assign [class="Pac"] $wspace7
 assign [class="Filezilla"] $wspace7
-assign [class="Nautilus"] $wspace7
+assign [class="Nautilus"] $wspace3
 assign [class="Remmina"] $wspace7
-assign [class="GitKraken"] $wspace7
+assign [class="GitKraken"] $wspace3
 assign [class="Mysql-workbench-bin"] $wspace8
 assign [class="SWT"] $wspace8
 assign [class="Atom"] $wspace9
 assign [class="Code"] $wspace9
-assign [class="jetbrains-idea-ce"] $wspace9
+assign [class="jetbrains-idea-ce"] $wspace4
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -199,7 +201,7 @@ bar {
 exec dropbox start
 
 #set wallpapper
-exec_always feh --bg-fill /home/adytmro/Pictures/wallpapper1.jpeg
+exec_always feh --bg-fill /home/adytmro/Pictures/wallpapper.jpg
 
 #start terminal server
 exec --no-startup-id urxvtd -f -q -o
@@ -208,8 +210,44 @@ exec --no-startup-id urxvtd -f -q -o
 exec --no-startup-id nm-applet
 
 #adjust screen
-bindsym $mod+t exec /home/adytmro/.screenlayout/screen.sh
-bindsym $mod+q exec /home/adytmro/.screenlayout/screen1.sh
+bindsym $mod+t exec /home/adytmro/.screenlayout/screen_home.sh
+bindsym $mod+q exec /home/adytmro/.screenlayout/screen_berg.sh
+
+# move focused window between monitors
+bindsym $mod+Shift+greater move workspace to output right
+bindsym $mod+Shift+less move workspace to output left
+
+ 
+# Review the lines below and append to ~/.config/i3/config
+
+## Volume control
+
+# Path to volume control, without trailing slash
+set $volumepath ~/i3-volume/volume
+
+# Command for the status line
+#   ie: i3blocks, i3status
+set $statuscmd i3status
+
+# Signal used to update the status line
+#   i3blocks uses SIGRTMIN+10 by default
+#   i3status uses SIGUSR1 by default
+set $statussig SIGUSR1
+
+# Amount to increase/decrease volume as a percentage
+set $volumestep 5
+
+# pulseaudio-utils settings
+#
+# Symbolic name for sink (numeric index not supported)
+#   Recommended: comment out this setting and omit the -s option to use default sink
+#   List sink names: pacmd list-sinks | awk -F "[<>]" '/^\s+name: <.*>/{print $2}'
+#set $sinkname alsa_output.pci-0000_00_1b.0.analog-stereo
+
+# Using pulseaudio-utils (append "-s $sinkname" without quotes to override default sink)
+bindcode 122 exec $volumepath -np -d $volumestep -t $statuscmd -u $statussig
+bindcode 123 exec $volumepath -np -i $volumestep -t $statuscmd -u $statussig
+
 
 # Start up Programs always that are always used
-exec --no-startup-id i3-msg 'workspace 2; exec google-chrome; workspace 5; exec thunderbird; workspace 6; exec skypeforlinux; workspace6; exec discord; workspace6; exec slack'
+exec --no-startup-id i3-msg 'workspace 2; exec google-chrome; workspace 5; exec thunderbird; workspace 6; exec skypeforlinux;'
